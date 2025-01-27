@@ -1,9 +1,11 @@
+// pages/index.tsx
 import { useQuery } from "@apollo/client";
 import { GET_EPISODES } from "@/graphql/queries";
 import { EpisodeProps } from "@/interfaces";
 import EpisodeCard from "@/components/common/EpisodeCard";
 import { useEffect, useState } from "react";
 import ErrorBoundary from "@/components/ErrorBoundary"; // Import the ErrorBoundary component
+import ErrorProneComponent from "@/components/ErrorProneComponent"; // Import the ErrorProneComponent
 
 const Home: React.FC = () => {
   const [page, setPage] = useState<number>(1);
@@ -74,6 +76,11 @@ const Home: React.FC = () => {
               Next
             </button>
           </div>
+        </ErrorBoundary>
+
+        {/* Example of ErrorProneComponent */}
+        <ErrorBoundary>
+          <ErrorProneComponent />
         </ErrorBoundary>
       </main>
 
