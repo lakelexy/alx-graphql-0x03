@@ -3,6 +3,7 @@ import { GET_EPISODES } from "@/graphql/queries";
 import { EpisodeProps } from "@/interfaces";
 import EpisodeCard from "@/components/common/EpisodeCard";
 import { useEffect, useState } from "react";
+import ErrorBoundary from "@/components/ErrorBoundary"; // Import the ErrorBoundary component
 
 const Home: React.FC = () => {
   const [page, setPage] = useState<number>(1);
@@ -36,38 +37,44 @@ const Home: React.FC = () => {
 
       {/* Main Content */}
       <main className="flex-grow p-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {results &&
-            results.map(
-              ({ id, name, air_date, episode }: EpisodeProps, key: number) => (
-                <EpisodeCard
-                  id={id}
-                  name={name}
-                  air_date={air_date}
-                  episode={episode}
-                  key={key}
-                />
-              )
-            )}
-        </div>
+        {/* Wrap this section with ErrorBoundary */}
+        <ErrorBoundary>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {results &&
+              results.map(
+                (
+                  { id, name, air_date, episode }: EpisodeProps,
+                  key: number
+                ) => (
+                  <EpisodeCard
+                    id={id}
+                    name={name}
+                    air_date={air_date}
+                    episode={episode}
+                    key={key}
+                  />
+                )
+              )}
+          </div>
 
-        {/* Pagination Buttons */}
-        <div className="flex justify-between mt-6">
-          <button
-            onClick={() => setPage((prev) => (prev > 1 ? prev - 1 : 1))}
-            className="bg-[#45B69C] text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-[#3D9B80] transition duration-200 transform hover:scale-105"
-          >
-            Previous
-          </button>
-          <button
-            onClick={() =>
-              setPage((prev) => (prev < info.pages ? prev + 1 : prev))
-            }
-            className="bg-[#45B69C] text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-[#3D9B80] transition duration-200 transform hover:scale-105"
-          >
-            Next
-          </button>
-        </div>
+          {/* Pagination Buttons */}
+          <div className="flex justify-between mt-6">
+            <button
+              onClick={() => setPage((prev) => (prev > 1 ? prev - 1 : 1))}
+              className="bg-[#45B69C] text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-[#3D9B80] transition duration-200 transform hover:scale-105"
+            >
+              Previous
+            </button>
+            <button
+              onClick={() =>
+                setPage((prev) => (prev < info.pages ? prev + 1 : prev))
+              }
+              className="bg-[#45B69C] text-white font-semibold py-2 px-6 rounded-lg shadow-lg hover:bg-[#3D9B80] transition duration-200 transform hover:scale-105"
+            >
+              Next
+            </button>
+          </div>
+        </ErrorBoundary>
       </main>
 
       {/* Footer */}
